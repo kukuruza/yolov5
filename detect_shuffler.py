@@ -25,6 +25,8 @@ import torch
 import torch.backends.cudnn as cudnn
 import torchvision.transforms
 
+from shuffler.interface.pytorch.datasets import ImageDataset
+
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
 if str(ROOT) not in sys.path:
@@ -41,7 +43,6 @@ from utils.torch_utils import select_device
 @torch.no_grad()
 def run(
     weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
-    shuffler_dir=None,
     in_db_file=None,
     rootdir=None,
     imgsz=(640, 640),  # inference size (height, width)
@@ -59,11 +60,6 @@ def run(
     progressbar.streams.wrap_stderr()
     progressbar.streams.wrap_stdout()
     FORMAT = '[%(filename)s:%(lineno)s - %(funcName)s() %(levelname)s]: %(message)s'
-
-    assert shuffler_dir is not None
-    print(shuffler_dir)
-    sys.path.append(shuffler_dir)
-    from interface.pytorch.datasets import ImageDataset
 
     labels_to_names = ast.literal_eval(coco_category_id_to_name_map)
 
@@ -158,9 +154,6 @@ def parse_opt():
                         help='Where image files in the db are relative to.',
                         required=True)
     parser.add_argument('--batch_size', type=int, default=1)
-    parser.add_argument('--shuffler_dir',
-                        help='The path of the shuffler repo.',
-                        required=True)
     parser.add_argument('--weights',
                         nargs='+',
                         type=str,
