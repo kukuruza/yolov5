@@ -123,10 +123,8 @@ def run(
                 width = xyxy[2] - xyxy[0]
                 height = xyxy[3] - xyxy[1]
 
-                # TODO: Remove int() once Shuffler moves to float point format.
-                object_entry = (imagefiles[i], int(x1), int(y1), int(width),
-                                int(height), labels_to_names[label.item()],
-                                score.item())
+                object_entry = (imagefiles[i], x1, y1, width, height,
+                                labels_to_names[label.item()], score.item())
                 s = 'objects(imagefile,x1,y1,width,height,name,score)'
                 dataset.execute('INSERT INTO %s VALUES (?,?,?,?,?,?,?)' % s,
                                 object_entry)
